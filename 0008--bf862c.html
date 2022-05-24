@@ -145,7 +145,7 @@
 comment_scrpit <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'comment.script'</span><span class="token punctuation">,</span><span class="token string">'r'</span><span class="token punctuation">)</span>
 comment_scrpit_str <span class="token operator">=</span> comment_scrpit<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 keyword <span class="token operator">=</span> <span class="token string">'&lt;/article>'</span>
-keyword_before <span class="token operator">=</span> <span class="token string">'回到主页'</span>
+keyword_before <span class="token operator">=</span> <span class="token string">'Home'</span>
 keyword_after_replace <span class="token operator">=</span> <span class="token string">'回到主页'</span>
 
 file_dir <span class="token operator">=</span> <span class="token string">'.\\public\\'</span>
@@ -184,7 +184,7 @@ my_blog_files <span class="token operator">=</span> file_name<span class="token 
         f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
         f<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 将回到主页换成回到主页</span>
+<span class="token comment"># 将Home换成回到主页</span>
 <span class="token keyword">for</span> blog_file_name <span class="token keyword">in</span> my_blog_files<span class="token punctuation">:</span>
     file_path <span class="token operator">=</span> file_dir<span class="token operator">+</span>blog_file_name
     replace<span class="token punctuation">(</span>file_path<span class="token punctuation">,</span> keyword_before<span class="token punctuation">,</span> keyword_after_replace<span class="token punctuation">)</span>
