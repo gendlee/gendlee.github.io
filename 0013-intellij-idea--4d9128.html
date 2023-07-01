@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0013 IntelliJ Idea 大法（未完待续）&nbsp;|&nbsp;李正的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0013 IntelliJ Idea 大法（未完待续）">
+  
+    <meta name="description" content="IDEA 的实用技能">
+    <meta property="og:description" content="IDEA 的实用技能">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🧉&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>回到主页</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="-e48d9c.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/woodcuts_sekka_2.jpg">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🧉&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0013 IntelliJ Idea 大法（未完待续）</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Sun, Jun 11, 2023</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--blue">
+            <a href="tag/smart地使用工具.html">smart地使用工具</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/4d9128c6d40b494cb39f295f84c6c45d" class="PageRoot"><blockquote id="https://www.notion.so/ce8d78f634fb465b86cc98eb40810a97" class="ColorfulBlock ColorfulBlock--ColorDefault Quote"><span class="SemanticStringArray"><span class="SemanticString">作为java程序开发人员，熟练使用IntelliJ IDEA可以事半功倍，本文总结一些实用的奇技淫巧（Windows）。</span></span></blockquote><h1 id="https://www.notion.so/8f889b8cd9ff4f059a6b96e49ca0aeeb" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/8f889b8cd9ff4f059a6b96e49ca0aeeb"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">1 快到起飞的快捷键</span></span></h1><ul class="BulletedListWrapper"><li id="https://www.notion.so/c9d0ab9bcf884688acbe479a9685bd0e" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">Alt+“x”：关闭所有非活动选项卡</strong></strong></span></span><div id="https://www.notion.so/b64601fa2cf04f7d969da970a27c4dad" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">如果在编辑器中打开的选项卡过多，只需按一个键并点击一下即可解决此问题。 操作方法： 按住</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Alt</em></span><span class="SemanticString"> 并点击活动选项卡上的“</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">x</em></span><span class="SemanticString">”，就可关闭其他页面，等效的操作是：右键→Close Other  Tabs，但是明显 按住</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Alt</em></span><span class="SemanticString"> 再点 “</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">x</em></span><span class="SemanticString">”更smart。</span></span></p></div><div id="https://www.notion.so/b6d027cbd84e4ccaa01ef2773acff27f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">演示：</span></span></p></div><div id="https://www.notion.so/28701acc02b648128a1e454fb40f8b3e" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff35b5ff9-9e19-4ca9-8a68-1e6037ba3aa2%2FUntitled.gif?width=1308&amp;table=block&amp;id=28701acc-02b6-4812-8a1e-454fb40f8b3e"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff35b5ff9-9e19-4ca9-8a68-1e6037ba3aa2%2FUntitled.gif?width=1308&amp;table=block&amp;id=28701acc-02b6-4812-8a1e-454fb40f8b3e" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/21f3069189684cef907ff812880869b4" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></li><li id="https://www.notion.so/4a34c2ae9bbd404b9a734e0a4f314640" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">Shift+Ctrl+V：选择要粘贴的内容</strong></strong></span></span><div id="https://www.notion.so/4ea73ce773a34a42ae770a47938cc3ea" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">IntelliJ IDEA 允许在剪贴板中保留多个最近复制的条目，并借助 </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Shift+Ctrl+V</em></span><span class="SemanticString"> 来粘贴其中的任意条目。 这意味着不必担心最近复制的任意一段代码丢失。</span></span></p></div><div id="https://www.notion.so/f190de61bcde4322bf8b29bca909dc26" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">演示：</span></span></p></div><div id="https://www.notion.so/421a04f009da445bb57d99812a740093" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F932094ca-6c7b-4d9b-9b88-636f68c4e18a%2FUntitled.gif?width=1308&amp;table=block&amp;id=421a04f0-09da-445b-b57d-99812a740093"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F932094ca-6c7b-4d9b-9b88-636f68c4e18a%2FUntitled.gif?width=1308&amp;table=block&amp;id=421a04f0-09da-445b-b57d-99812a740093" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/3b24942b32f441e19a0e1fafb5aff3a1" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></li><li id="https://www.notion.so/4f1e48508ab74280be8eb300a9e26075" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">Ctrl+Alt+L：重新格式化代码</strong></strong></span></span><div id="https://www.notion.so/4bc7a46423b54ce393d05dcad93aa9c8" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">如果项目中的格式不符合你所使用的约定，请根据您的设置选择一段要重新格式化的代码，然后按 </span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">Ctrl+Alt+L</em></span><span class="SemanticString"> 一键格式化。不过有个小问题，你会因为格式化而显示你修改了对行代码，会被人误会是你提交的逻辑代码。</span></span></p></div><div id="https://www.notion.so/b096b9cfe2694458ada7e67dfcb85dd7" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">演示：</span></span></p></div><div id="https://www.notion.so/f815831c458d476fa8ad6e3aae5324f6" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fdea35ea7-dc2f-40b3-a5bd-ed69929006f2%2FUntitled.gif?width=1308&amp;table=block&amp;id=f815831c-458d-476f-a8ad-6e3aae5324f6"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fdea35ea7-dc2f-40b3-a5bd-ed69929006f2%2FUntitled.gif?width=1308&amp;table=block&amp;id=f815831c-458d-476f-a8ad-6e3aae5324f6" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/59d06454983e429dbab6bfaac7707290" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/a337daa3da484990938f95ebe5bfd89f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">Ctrl+F12：按文件结构导航</strong></strong></span></span></p></div><div id="https://www.notion.so/f0eb55e5db3a409a92f97a3c85e49d3e" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">演示：</span></span></p></div><div id="https://www.notion.so/65f2d240e61944aea1da15a2485e33ce" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62b458bc-d7a0-49d5-b3d8-f3aa5913b403%2FUntitled.gif?width=1308&amp;table=block&amp;id=65f2d240-e619-44ae-a1da-15a2485e33ce"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F62b458bc-d7a0-49d5-b3d8-f3aa5913b403%2FUntitled.gif?width=1308&amp;table=block&amp;id=65f2d240-e619-44ae-a1da-15a2485e33ce" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div></li></ul></article>
+
+<script src="https://utteranc.es/client.js"
+        repo="gendlee/gendlee.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+  <footer class="Footer">
+  <div>&copy; 李正的自留地 2019-2021</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+</body>
+
+</html>
