@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-152513368-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-152513368-1');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0002 LRU算法浅析&nbsp;|&nbsp;李正的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0002 LRU算法浅析">
+  
+    <meta name="description" content="LRU（Least Recently Used)，最近最少使用原则算法浅析。">
+    <meta property="og:description" content="LRU（Least Recently Used)，最近最少使用原则算法浅析。">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🖌️&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>Home</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/gradients_11.jpg">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🖌️&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0002 LRU算法浅析</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Thu, Oct 14, 2021</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--pink">
+            <a href="tag/算法.html">算法</a>
+          </span>
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--gray">
+            <a href="tag/JAVA.html">JAVA</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/6fd483888d694184a4ed7699568a65b5" class="PageRoot"><div id="https://www.notion.so/5897dd9b8ab24f66a698b2833d2aa058" class="ColorfulBlock ColorfulBlock--ColorOrange Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">✏️原理概述：LRU（Least Recently Used)，最近最少使用原则实现的缓存淘汰算法。</span></span></p></div><div id="https://www.notion.so/6bbc1062a5fe44b19eff15509d20af3f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/9561b6080afe409982de38b1265e7c90" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">❌</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">“最近最少”的误解</strong></span><span class="SemanticString">：很多人看字面意思很可能理解为“最近使用和最少使用的被淘汰”，理解几乎完全相反了。</span></span></p></div><div id="https://www.notion.so/3a226f8bff94430baaa98c7f9ed0f16f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/c06b71337e644052a5c20c7eec371641" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><mark class="SemanticString__Fragment SemanticString__Fragment--HighlightedColor SemanticString__Fragment--ColorOrange">✔️</mark></span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">“最近最少”的正确理解</strong></span><span class="SemanticString">：基于这一种准则：</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">刚使用过的、最新添加的元素，被（再次）使用到的概率更大，因此要放到队列读取的最前端，最先淘汰队列尾端的元素（说明它被添加的时间很长了而且很少被访问到过，若是新添加的、经常被访问过的应该在靠近读取端头部）</strong></span><span class="SemanticString">。</span></span></p></div><div id="https://www.notion.so/54c3ea94ca264c59850b8c12da6c0afc" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/f52de4a60a3a4026a347a5c11381ab82" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">看这样一个例子：</span><span class="SemanticString"><mark class="SemanticString__Fragment SemanticString__Fragment--HighlightedColor SemanticString__Fragment--ColorGreen"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://leetcode-cn.com/problems/lru-cache-lcci/">面试题 16.25. LRU 缓存</a></mark></span></span></p></div><pre id="https://www.notion.so/cf1487a53ed340549293ac71c37b133d" class="Code Code--NoWrap"><code><span class="SemanticStringArray"><span class="SemanticString"><span>//简单删了几个方法
+LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // 返回  1
+cache.put(3, 3);    // 该操作会使得密钥 2 作废
+cache.put(4, 4);    // 该操作会使得密钥 1 作废</span></span></span></code></pre><h3 id="https://www.notion.so/f9857400883c4b29aecf6d066dc3fa61" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/f9857400883c4b29aecf6d066dc3fa61"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">✏️下面是图解:</span></span></h3><div id="https://www.notion.so/b171928d497d4d71b912299331ef761a" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F5d10821b-753a-4174-b7fe-c22f83a8e338%2Fpic.jpg?width=2736&amp;table=block&amp;id=b171928d-497d-4d71-b912-299331ef761a"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F5d10821b-753a-4174-b7fe-c22f83a8e338%2Fpic.jpg?width=2736&amp;table=block&amp;id=b171928d-497d-4d71-b912-299331ef761a" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/98b2bedd09684920bc4e15beca5a7e4f" class="Divider"></div><div id="https://www.notion.so/cceed4c3ce144d9db36a683c0af40452" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><h2 id="https://www.notion.so/584690fc25194b6aa539ee5b26d97ac3" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/584690fc25194b6aa539ee5b26d97ac3"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">💠实现方式① ：利用LinkedHashMap的accessOrder</span></span></h2><pre id="https://www.notion.so/0333fb0a67084bb691cb5eca0e3a737b" class="Code Code--NoWrap"><code><span class="SemanticStringArray"><span class="SemanticString"><span>class LRUCache {
+    private int capacity;
+    private Map&lt;Integer, Integer&gt; map;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.map = new LinkedHashMap(capacity);  //单纯使用LinkedHashMap的插入顺序与输出顺序一致
+
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key))
+            return -1;
+        int val = map.get(key);
+        //重新put，将访问过的元素提到队头（访问方向）
+        map.remove(key);
+        map.put(key, val);
+
+        return val;
+
+    }
+
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            map.remove(key);
+            map.put(key, value);
+            return;
+        }
+       //超过容器大小，删除队尾。
+       //刚好LinkedHashMap的迭代指针默认指向队尾，所以直接删除指针第一个
+        if (map.size() &gt;= capacity)
+            map.remove(map.keySet().iterator().next());
+
+        map.put(key, value);
+
+    }
+}
+</span></span></span></code></pre><h2 id="https://www.notion.so/fbe8693d17b0476ab234b7e39bec6f12" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/fbe8693d17b0476ab234b7e39bec6f12"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">💠实现方式②：继承LinkedHashMap重写</span></span></h2><div id="https://www.notion.so/a9172dab8ec0410eac853e20ebfdf0b3" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">LinkedHashMap的最大价值就是缓存淘汰实现，其</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">内部已经被实现了LRU基础功能</strong></span><span class="SemanticString">，需要修改的是removeEldestEntry方法，</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">即在什么情况下才会触发删除策略，我们这里是当容器满了的时候，触发删除策略</strong></span><span class="SemanticString">。</span></span></p></div><pre id="https://www.notion.so/b5c3f600498d4c5b8a11806246e27a3c" class="Code Code--NoWrap"><code><span class="SemanticStringArray"><span class="SemanticString"><span>class LRUCache extends LinkedHashMap&lt;Integer, Integer&gt;{
+    private int capacity;
+    //增加负载因子，超过容量会自动删除
+    private static final Float CAPACITY_FACTOR = 0.75f;
+
+    public LRUCache(int capacity) {
+        super(capacity, CAPACITY_FACTOR, true);
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        return super.getOrDefault(key, -1);
+    }
+
+    public void put(int key, int value) {
+       super.put(key, value);
+    }
+    //重写removeEldestEntry方法，当超过容器元素时移除最“老”元素
+    @Override
+    protected boolean removeEldestEntry(Map.Entry&lt;Integer, Integer&gt; eldest) {
+        //size()为 父类已有的方法
+        return size() &gt; capacity;
+
+    }
+}</span></span></span></code></pre><h2 id="https://www.notion.so/0d5cfa93bc9e4110a8a6ccab399d3785" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/0d5cfa93bc9e4110a8a6ccab399d3785"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">💠实现方式③：HashMap + 双向链表</span></span></h2><div id="https://www.notion.so/452b89e169544150badf6a9734174f99" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">操作方式：读取在链表尾，删除在链表头，所以要增加移动到链表尾的操作。</span></span></p></div><div id="https://www.notion.so/6c1f5dace7a74a8db2550ffd7e94ceb7" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">注意，双向链表中，</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">head和tail是哨兵节点</strong></span><span class="SemanticString">，不存储实际值，实际链表的值在两者之间。</span></span></p></div><pre id="https://www.notion.so/ac4b428ee8da4a038017d2dfffb1b073" class="Code Code--NoWrap"><code><span class="SemanticStringArray"><span class="SemanticString"><span>public class LRUCache{
+
+    private int capacity;
+    private Map&lt;Integer, ListNode&gt; map; //key-&gt;node
+    private ListNode head;  // dummy head
+    private ListNode tail;  // dummy tail
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        map = new HashMap&lt;&gt;();
+        head = new ListNode(-1, -1);
+        tail = new ListNode(-1, -1);
+        head.next = tail;
+        tail.pre = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        ListNode node = map.get(key);
+        // 先删除该节点，再接到尾部
+        node.pre.next = node.next;
+        node.next.pre = node.pre;
+        moveToTail(node);
+
+        return node.val;
+    }
+
+    public void put(int key, int value) {
+        // 直接调用这边的get方法，如果存在，它会在get内部被移动到尾巴，不用再移动一遍,直接修改值即可
+        if (get(key) != -1) {
+            map.get(key).val = value;
+            return;
+        }
+        // 若不存在，new一个出来,如果超出容量，把头去掉
+        ListNode node = new ListNode(key, value);
+        map.put(key, node);
+        moveToTail(node);
+
+        if (map.size() &gt; capacity) {
+            map.remove(head.next.key);
+            head.next = head.next.next;
+            head.next.pre = head;
+        }
+    }
+
+    // 把节点移动到尾巴
+    private void moveToTail(ListNode node) {
+        node.pre = tail.pre;
+        tail.pre = node;
+        node.pre.next = node;
+        node.next = tail;
+    }
+
+    // 定义双向链表节点
+    private class ListNode {
+        int key;
+        int val;
+        ListNode pre;
+        ListNode next;
+
+        public ListNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+            pre = null;
+            next = null;
+        }
+    }
+}
+</span></span></span></code></pre><h2 id="https://www.notion.so/62a71c29e5234c64b02db34806a69fc0" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--2"><a class="Anchor" href="#https://www.notion.so/62a71c29e5234c64b02db34806a69fc0"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">💠实现方式④：HashMap + 单向链表</span></span></h2><pre id="https://www.notion.so/0c0335e4493d44919d9981c05b1f0b6e" class="Code Code--NoWrap"><code><span class="SemanticStringArray"><span class="SemanticString"><span>public class LRUCache{
+
+    private int capacity;
+    private Map&lt;Integer, ListNode&gt; map; //key -&gt; node.pre
+    private ListNode head;  // dummy
+    private ListNode tail;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        map = new HashMap&lt;&gt;();
+        head = new ListNode(-1, -1);
+        tail = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1;
+        }
+        // map中存放的是要找的节点的前驱
+        ListNode pre = map.get(key);
+        ListNode cur = pre.next;
+
+        // 把当前节点删掉并移到尾部
+        if (cur != tail) {
+            pre.next = cur.next;
+            // 更新它后面 node 的前驱
+            map.put(cur.next.key, pre);
+            map.put(cur.key, tail);
+            moveToTail(cur);
+        }
+        return cur.val;
+    }
+
+    public void put(int key, int value) {
+        if (get(key) != -1) {
+            map.get(key).next.val = value;
+            return;
+        }
+        // 若不存在则 new 一个
+        ListNode node = new ListNode(key, value);
+        // 当前 node 的 pre 是 tail
+        map.put(key, tail);
+        moveToTail(node);
+
+        if (map.size() &gt; capacity) {
+            map.remove(head.next.key);
+            map.put(head.next.next.key, head);
+            head.next = head.next.next;
+        }
+    }
+
+    private void moveToTail(ListNode node) {
+        node.next = null;
+        tail.next = node;
+        tail = tail.next;
+    }
+
+    // 定义单链表节点
+    private class ListNode {
+        int key, val;
+        ListNode next;
+
+        public ListNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+            this.next = null;
+        }
+    }
+
+}</span></span></span></code></pre></article>
+  <footer class="Footer">
+  <div>&copy; 李正的自留地 2019-2021</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+</body>
+
+</html>
