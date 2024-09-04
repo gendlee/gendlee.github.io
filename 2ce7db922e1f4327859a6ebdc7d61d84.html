@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0005 分布式事务方案之2PC、3PC简介&nbsp;|&nbsp;李正的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0005 分布式事务方案之2PC、3PC简介">
+  
+    <meta name="description" content="业界常用的分布式事务解决方案，通俗语言讲解">
+    <meta property="og:description" content="业界常用的分布式事务解决方案，通俗语言讲解">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🕸️&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>Home</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/nasa_transonic_tunnel.jpg">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🕸️&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0005 分布式事务方案之2PC、3PC简介</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Thu, Apr 7, 2022</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--blue">
+            <a href="tag/分布式事务.html">分布式事务</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/2ce7db922e1f4327859a6ebdc7d61d84" class="PageRoot"><h1 id="https://www.notion.so/2a132aca4eea43eaa79b316685e69918" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/2a132aca4eea43eaa79b316685e69918"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">1、引言</span></span></h1><div id="https://www.notion.so/a8019fa40d8f4241a48f7100c176bf4c" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">💡</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">事务是指程序在做一件事情的时候，要么成功完成，要么完不成。把满足ACID特征事务的称为刚性事务，即具有非常强的一致性要求。随着分布式系统的不断普及，分布式事务方案不断涌现出来，本文将学习总结下当前比较流行的分布式事务框架，目的是学习前人解决问题的思路，以备实际开发中可以借鉴。</span></span></p></div><h1 id="https://www.notion.so/9a8eb8f27aad485a88221b00c55034c7" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/9a8eb8f27aad485a88221b00c55034c7"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">2、2PC方案</span></span></h1><div id="https://www.notion.so/dced447599fe419f8af8ceb7e81d596f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">考虑这样一个需求：用户A想要去某地旅行，为了避免繁琐的购票环节，通过一家旅行社安排行程。旅行社要做的事情为：订一张火车票和目的地的酒店，如果订购火车票失败，就不会定酒店，行程自然失败；同样的如果火车票订购成功但是酒店订购失败，行程也将失败。即订购火车票和订酒店这两个动作只要有一个失败，行程都将失败，如图1所示。</span></span></p><div class="Text__Children"><div id="https://www.notion.so/7fa0b8618d334bbe8c1335f236a1f96e" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7ef69a21-3918-46e6-b2d7-19e0710caa89%2F01.png?width=1430&amp;table=block&amp;id=7fa0b861-8d33-4bbe-8c13-35f236a1f96e"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F7ef69a21-3918-46e6-b2d7-19e0710caa89%2F01.png?width=1430&amp;table=block&amp;id=7fa0b861-8d33-4bbe-8c13-35f236a1f96e" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/de0d81b303ef4241bc29230ea2506ee3" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/1f8df4d64a144ac5b85656cbd0fb1efe" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">                                                                 图1 旅行社订票示意图</span></span></p></div><div id="https://www.notion.so/bff8ff3c77c647f58e1914bc97672e7d" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">上述的过程其实就是一个分布式事务解决方案：</span><span class="SemanticString"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">2PC</strong></span></span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">（Two-Phase Commit，两阶段提交</strong></span><span class="SemanticString">）。2PC中引入了</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown">参与者</span></strong></span><span class="SemanticString">（Participant）与</span><span class="SemanticString"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">协调者</strong></span></span><span class="SemanticString">（Coordinator）的概念。参与者是指参与执行具体功能业务的服务节点，上述例子中，订票的12306和订酒店的携程就是这次活动中的参与者。协调者是指接收服务请求后向将对应服务指派给对应参与者并询问执行结果的角色，比如上述的</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">旅行社就是协调者</strong></span><span class="SemanticString">，在订车票和订酒店时，都有两个步骤：</span></span></p></div><div id="https://www.notion.so/cddcfd3ec59d423baf15fc219df9f2f5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">1）锁定：先下单锁定票，但是不支付 ；</span></span></p></div><div id="https://www.notion.so/0c6361f56ddd47d19ed794bab65b5298" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">2）支付：火车票和酒店都锁定成功后，再统一发起支付。</span></span></p></div><div id="https://www.notion.so/7dd71e34aba745c7a64bb4f6284bdaa6" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">锁定票阶段，每个参与者（12306、携程）会告知旅行社（协调者），是否已经锁定成功，如果都已经锁定成功，则旅行社将发起第二步统一支付，支付完后才能代表本次行程安排成功。</span></span></p></div><div id="https://www.notion.so/6c44e2bc579c45858f3ed8251c3b0784" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/fd6484f2ac6542e89455319f08c79cd4" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">当然，如果有一个参与者没有锁定成功，比如没有锁定到还有空房间的酒店，旅行社将在12306中取消支付（回滚），并告知用户本次包办的任务失败。</span></span></p></div><div id="https://www.notion.so/692b9acbb989466fa1a58a5e19a4fb50" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/96b883b6cafb4de18b928bd6e69542b0" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">在定义上，2PC将分布式事务过程分为两个阶段：</span></span></p></div><blockquote id="https://www.notion.so/059ad9d603114756aeb4f00b9b3872f8" class="ColorfulBlock ColorfulBlock--ColorBlue Quote"><span class="SemanticStringArray"><span class="SemanticString">投票阶段（voting phase）：参与者将操作结果告知协调者；
+提交阶段（commit phase）：协调者收到参与者的通知后，根据反馈的结果（成功or失败）决定各个参与者是提交还是回滚。</span></span></blockquote><div id="https://www.notion.so/75eddeed0ffe41cd8517cff88ab39f53" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/432325d608014372ab81d1d5634771a1" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">实际上，2PC是</span><span class="SemanticString"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">XA规范</strong></span></span><span class="SemanticString">的一种衍生实现，XA规范是指：</span></span></p></div><blockquote id="https://www.notion.so/02780d2db5254217b2d600f86234c12a" class="ColorfulBlock ColorfulBlock--ColorDefault Quote"><span class="SemanticStringArray"><span class="SemanticString">X/Open 组织（即现在的 Open Group ）定义的分布式事务处理（DTP）模型。 X/Open DTP 模型包括应用程序（ AP ）、事务管理器（ TM ）、资源管理器（ RM ）、通信资源管理器（ CRM ）四部分。通常，事务管理器（ TM ）是指交易中间件，资源管理器（ RM ）是数据库，通信资源管理器（ CRM ）是消息中间件。</span></span></blockquote><div id="https://www.notion.so/ca6eeadf389641c38c6ed9fe1de97bca" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/9854947da3a24320969ff36f248ef5db" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">以MySQL为例，它的事务就是通过XA规范的2PC实现的，MySQL的两阶段为：</span></span></p></div><div id="https://www.notion.so/25fc2c5aeb9c4f1ab7e615632d11fd37" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">👉</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">第一阶段：发送prepare消息，这一步完成SQL语句操作，但是事务未提交；
+第二阶段：如果第一阶段prepare失败/成功，协调者通知所有库回滚/提交.</span></span></p></div><div id="https://www.notion.so/93ea5acbe11d4df1af3dc9ddf0072f85" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">如图2所示：</span></span></p></div><div id="https://www.notion.so/f3f8efbf40224e429051e35fedf91ed6" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff92aa3b8-abec-4759-b374-6c241052c737%2F02.png?width=1676&amp;table=block&amp;id=f3f8efbf-4022-4e42-9051-e35fedf91ed6"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff92aa3b8-abec-4759-b374-6c241052c737%2F02.png?width=1676&amp;table=block&amp;id=f3f8efbf-4022-4e42-9051-e35fedf91ed6" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/95114bcd46c34bfbbb9120b7f018197d" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">                                                 图2 MySQL两阶段过程</span></span></p></div><div id="https://www.notion.so/79e03991b13d44e897f03fab8464b157" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/bab3819c437c43a68a4fdc0ca10c1a07" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">假设12306或携程没有支付超时后释放锁定的机制，可能会遇到这样一些麻烦：</span></span></p></div><div id="https://www.notion.so/3f43469923c5477882dcd6cadb822919" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">🤪</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">1）12306或携程锁定资源过程中，旅行社要等每个参与者返回锁定结果，这个过程是</span><span class="SemanticString"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">同步阻塞</strong></span></span><span class="SemanticString">的，用户会觉得太慢了，体验不佳；</span></span></p></div><div id="https://www.notion.so/77e9c559de29406a8bbbfb4ccc1a233f" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">🤪</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">2）12306和携程锁定资源成功，但旅行社由于只有1个人A，通知结果被遗漏处理，就会导致锁定的资源一直锁定着无法释放，这就是旅行社（协调者）</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">单点问题</strong></span><span class="SemanticString">导致的参与者资源一直被锁定着；</span></span></p></div><div id="https://www.notion.so/a3b957ae0c6045219a0f222bed9d3bbb" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">🤪</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">假设旅行社增加了1个人B，现在2个人以换班的方式处理，A和B换班后，B是不知道哪些已经支付过，哪些支付失败了的，也就是导致了协调者切换过程中的</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">事务状态丢失</strong></span><span class="SemanticString">。</span></span></p></div><div id="https://www.notion.so/7eb67c055cc042b2a1e5253bcb55d2df" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">🤪</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">3）如果在确认支付的时候，12306收到了确认支付请求并成功完成了支付，但是发送给携程支付的请求丢失了，此时参与者之间会将存在</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">数据不一致</strong></span><span class="SemanticString">。即预期应该是12306和携程中的状态都是已支付状态，实际上携程中状态是未支付或支付失败。该问题也叫</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">脑裂</strong></span><span class="SemanticString">。</span></span></p></div><div id="https://www.notion.so/e3daa22764d74194b690213285945623" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/536bb991326341a5ad31fdd23620013b" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">以上麻烦就是典型的2PC的四种缺陷：同步阻塞、协调者单点问题、事务状态丢失、数据不一致。</span></span></p></div><div id="https://www.notion.so/5a0da68895b3417e8eccd25585c6c785" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">为了解决2PC的上述三种问题，业界引入了3PC分布式解决方案。</span></span></p></div><div id="https://www.notion.so/403a6c9d37e14582ad1687cce40ed8ec" class="Divider"></div><h1 id="https://www.notion.so/693ebb550cb94cc1b53056f136a68e63" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/693ebb550cb94cc1b53056f136a68e63"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">3、3PC方案</span></span></h1><div id="https://www.notion.so/d5b6bea699864033a324a267cef5fb35" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><span class="SemanticString__Fragment SemanticString__Fragment--Unknown"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">3PC（Three-Phase Commit）</strong></span></span><span class="SemanticString">即三阶段提交，它是将2CP第一阶段分为了两个阶段：能提交和准备提交，最后形成三阶段提交，同时在RM中引入</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">超时机制</strong></span><span class="SemanticString">：当RM超时未收到协调者的确认提交消息，会自动提交以释放资源，比如12306中超时未支付，系统自动给你支付了（实际上不会）。</span></span></p></div></div></div><blockquote id="https://www.notion.so/8977a27c1e404b8aa2ddf37a230c4ad7" class="ColorfulBlock ColorfulBlock--ColorDefault Quote"><span class="SemanticStringArray"><span class="SemanticString"><mark class="SemanticString__Fragment SemanticString__Fragment--HighlightedColor SemanticString__Fragment--ColorBlue">第一阶段：发送CanCommit请求，确认数据库环境正常；
+第二阶段：发送PreCommit请求，完成SQL操作，但是未提交；
+第三阶段：发送DoCommit请求，通知所有数据库提交/回滚。</mark></span></span></blockquote><div id="https://www.notion.so/ddb63b4ad4554a23a98a3de9a811fbd5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">如图3所示：</span></span></p></div><div id="https://www.notion.so/2f7b6a0e03f049928659ee12fb79735e" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F67c496e2-dd69-403d-8980-121a35ce1bd5%2F03.png?width=1676&amp;table=block&amp;id=2f7b6a0e-03f0-4992-8659-ee12fb79735e"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F67c496e2-dd69-403d-8980-121a35ce1bd5%2F03.png?width=1676&amp;table=block&amp;id=2f7b6a0e-03f0-4992-8659-ee12fb79735e" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/226a9f80608548af9e96e8a8ea43e8b5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">                                                 图3 3PC过程示意图</span></span></p></div><div id="https://www.notion.so/d81b7d2bd95b4cb7a6308c1df0edde32" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/3203ceb85d7d4020b76026312c8fec88" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">考虑这样一种情况：我本来是要取消12306支付的，命令发出去之后，由于网络原因，12306超时都未收到我发送的取消支付指令，就主动给我支付了，这显然不合理，这就是3PC的</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">数据不一致性</strong></span><span class="SemanticString">问题，即：</span></span></p></div><div id="https://www.notion.so/70b68e632d6a452ebba10c785ac2f7a5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</span></span></p></div><div id="https://www.notion.so/bda139f3124849b48a8760a179951156" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/562571093ad3402fb478337c11bba6e4" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">以上就是2PC和3PC的基本介绍，后续文章将继续总结和介绍其他的分布式思想。</span></span></p></div><div id="https://www.notion.so/6c6778a6c6f3497c809d9f4fe655c065" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>
+  <footer class="Footer">
+  <div>&copy; 李正的自留地 2024</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+
+</body>
+
+</html>

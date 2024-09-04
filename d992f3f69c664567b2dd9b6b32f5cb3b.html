@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0003 Redis数据结构及应用&nbsp;|&nbsp;李正的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0003 Redis数据结构及应用">
+  
+    <meta name="description" content="redis的一些学习分享">
+    <meta property="og:description" content="redis的一些学习分享">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;📝&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>Home</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/woodcuts_3.jpg">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;📝&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0003 Redis数据结构及应用</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Sat, Nov 20, 2021</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--purple">
+            <a href="tag/DB.html">DB</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/d992f3f69c664567b2dd9b6b32f5cb3b" class="PageRoot"><div id="https://www.notion.so/6528dc8f540845b38a10688411a49336" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">以下是个人学习总结的redis知识内容，供学习参考。</span></span></p></div><div id="https://www.notion.so/656419bdd67f44e7897c72d39ccbe660" class="Divider"></div><div id="https://www.notion.so/15c59bc3fd9d42218149bf3627bc4dbd" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/5b804ce64417439c9026bf0cb831a8a2" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F82eab49c-5249-4ed1-8b9b-64f6bdc7315a%2F%E5%B9%BB%E7%81%AF%E7%89%871.png?width=1280&amp;table=block&amp;id=5b804ce6-4417-439c-9026-bf0cb831a8a2"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F82eab49c-5249-4ed1-8b9b-64f6bdc7315a%2F%E5%B9%BB%E7%81%AF%E7%89%871.png?width=1280&amp;table=block&amp;id=5b804ce6-4417-439c-9026-bf0cb831a8a2" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/1bb9b0a0534f4b0dbd87561b2b8bd6a1" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fee6a7bbd-05db-4911-9abc-043c6b1286a6%2F%E5%B9%BB%E7%81%AF%E7%89%872.png?width=1280&amp;table=block&amp;id=1bb9b0a0-534f-4b0d-bd87-561b2b8bd6a1"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fee6a7bbd-05db-4911-9abc-043c6b1286a6%2F%E5%B9%BB%E7%81%AF%E7%89%872.png?width=1280&amp;table=block&amp;id=1bb9b0a0-534f-4b0d-bd87-561b2b8bd6a1" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/5a63f3091aa84e7f940a3ccaa0607f17" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0a03556a-aba1-40a5-8f8b-e76ae9b6bf8d%2F%E5%B9%BB%E7%81%AF%E7%89%873.png?width=1280&amp;table=block&amp;id=5a63f309-1aa8-4e7f-940a-3ccaa0607f17"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0a03556a-aba1-40a5-8f8b-e76ae9b6bf8d%2F%E5%B9%BB%E7%81%AF%E7%89%873.png?width=1280&amp;table=block&amp;id=5a63f309-1aa8-4e7f-940a-3ccaa0607f17" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/cf8f4de770ad46fc87b02473a0efc5ba" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fce5f68f9-45a3-4393-9f6a-7c860574ba53%2F%E5%B9%BB%E7%81%AF%E7%89%874.png?width=1280&amp;table=block&amp;id=cf8f4de7-70ad-46fc-87b0-2473a0efc5ba"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fce5f68f9-45a3-4393-9f6a-7c860574ba53%2F%E5%B9%BB%E7%81%AF%E7%89%874.png?width=1280&amp;table=block&amp;id=cf8f4de7-70ad-46fc-87b0-2473a0efc5ba" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/d325bd48cb83416fa61e186be2c8d324" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc6dd6a86-2f44-4c8f-9d04-4420be50b5ee%2F%E5%B9%BB%E7%81%AF%E7%89%875.png?width=1280&amp;table=block&amp;id=d325bd48-cb83-416f-a61e-186be2c8d324"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc6dd6a86-2f44-4c8f-9d04-4420be50b5ee%2F%E5%B9%BB%E7%81%AF%E7%89%875.png?width=1280&amp;table=block&amp;id=d325bd48-cb83-416f-a61e-186be2c8d324" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/76356d0379324e10bd95402cf3021d18" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F861ebf71-9d73-4fc9-bc5f-e8ca92df1a0a%2F%E5%B9%BB%E7%81%AF%E7%89%876.png?width=1280&amp;table=block&amp;id=76356d03-7932-4e10-bd95-402cf3021d18"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F861ebf71-9d73-4fc9-bc5f-e8ca92df1a0a%2F%E5%B9%BB%E7%81%AF%E7%89%876.png?width=1280&amp;table=block&amp;id=76356d03-7932-4e10-bd95-402cf3021d18" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/e9d90c2404ee42b5b7d8182c57d1c3e8" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4116bdc3-3782-407c-8ea7-9411658cdf44%2F%E5%B9%BB%E7%81%AF%E7%89%877.png?width=1280&amp;table=block&amp;id=e9d90c24-04ee-42b5-b7d8-182c57d1c3e8"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4116bdc3-3782-407c-8ea7-9411658cdf44%2F%E5%B9%BB%E7%81%AF%E7%89%877.png?width=1280&amp;table=block&amp;id=e9d90c24-04ee-42b5-b7d8-182c57d1c3e8" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/5a3c2697df1646548bb8cc5420d0e178" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fe3b7864d-b0aa-4c6d-93ba-b8735ebf1e24%2F%E5%B9%BB%E7%81%AF%E7%89%878.png?width=1280&amp;table=block&amp;id=5a3c2697-df16-4654-8bb8-cc5420d0e178"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fe3b7864d-b0aa-4c6d-93ba-b8735ebf1e24%2F%E5%B9%BB%E7%81%AF%E7%89%878.png?width=1280&amp;table=block&amp;id=5a3c2697-df16-4654-8bb8-cc5420d0e178" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/8c137b377e6a4142ab7136382893693f" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa581dafd-b4b2-4aad-92cf-c53f087a7942%2F%E5%B9%BB%E7%81%AF%E7%89%879.png?width=1280&amp;table=block&amp;id=8c137b37-7e6a-4142-ab71-36382893693f"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa581dafd-b4b2-4aad-92cf-c53f087a7942%2F%E5%B9%BB%E7%81%AF%E7%89%879.png?width=1280&amp;table=block&amp;id=8c137b37-7e6a-4142-ab71-36382893693f" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/8f97fec504084a6bb1f48523a4ad289d" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8de8ae6a-7ce6-4bbd-be76-baca08424d06%2F%E5%B9%BB%E7%81%AF%E7%89%8710.png?width=1280&amp;table=block&amp;id=8f97fec5-0408-4a6b-b1f4-8523a4ad289d"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8de8ae6a-7ce6-4bbd-be76-baca08424d06%2F%E5%B9%BB%E7%81%AF%E7%89%8710.png?width=1280&amp;table=block&amp;id=8f97fec5-0408-4a6b-b1f4-8523a4ad289d" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/9ca292e88be0405a99932731d7a7c0c5" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F65bb0a95-be46-4c37-8e37-8052fcb933b1%2F%E5%B9%BB%E7%81%AF%E7%89%8711.png?width=1280&amp;table=block&amp;id=9ca292e8-8be0-405a-9993-2731d7a7c0c5"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F65bb0a95-be46-4c37-8e37-8052fcb933b1%2F%E5%B9%BB%E7%81%AF%E7%89%8711.png?width=1280&amp;table=block&amp;id=9ca292e8-8be0-405a-9993-2731d7a7c0c5" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/a469818297a644d1b6171a0c26161dd5" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd267bc8f-6921-44e8-97ce-ee9c12a1c925%2F%E5%B9%BB%E7%81%AF%E7%89%8712.png?width=1280&amp;table=block&amp;id=a4698182-97a6-44d1-b617-1a0c26161dd5"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd267bc8f-6921-44e8-97ce-ee9c12a1c925%2F%E5%B9%BB%E7%81%AF%E7%89%8712.png?width=1280&amp;table=block&amp;id=a4698182-97a6-44d1-b617-1a0c26161dd5" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/16a4961baf194b98b2a2ccc90fe4910f" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff6da3f66-bb6f-4951-a0de-5c718a28a5f3%2F%E5%B9%BB%E7%81%AF%E7%89%8713.png?width=1280&amp;table=block&amp;id=16a4961b-af19-4b98-b2a2-ccc90fe4910f"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff6da3f66-bb6f-4951-a0de-5c718a28a5f3%2F%E5%B9%BB%E7%81%AF%E7%89%8713.png?width=1280&amp;table=block&amp;id=16a4961b-af19-4b98-b2a2-ccc90fe4910f" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/f691d691fe174f728dceee0b5e5221f4" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd182776f-07a8-46a5-8f23-9fc512bb2d89%2F%E5%B9%BB%E7%81%AF%E7%89%8714.png?width=1280&amp;table=block&amp;id=f691d691-fe17-4f72-8dce-ee0b5e5221f4"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd182776f-07a8-46a5-8f23-9fc512bb2d89%2F%E5%B9%BB%E7%81%AF%E7%89%8714.png?width=1280&amp;table=block&amp;id=f691d691-fe17-4f72-8dce-ee0b5e5221f4" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/d4a7795affd4429fa21a9d6e43f09caf" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb5e0b244-428a-4a55-af2e-c1a0f1c447c3%2F%E5%B9%BB%E7%81%AF%E7%89%8715.png?width=1280&amp;table=block&amp;id=d4a7795a-ffd4-429f-a21a-9d6e43f09caf"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb5e0b244-428a-4a55-af2e-c1a0f1c447c3%2F%E5%B9%BB%E7%81%AF%E7%89%8715.png?width=1280&amp;table=block&amp;id=d4a7795a-ffd4-429f-a21a-9d6e43f09caf" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/13728992f45d4326981246d274b4b999" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffda7a693-221e-4fae-a6aa-d7140480b70b%2F%E5%B9%BB%E7%81%AF%E7%89%8716.png?width=1280&amp;table=block&amp;id=13728992-f45d-4326-9812-46d274b4b999"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffda7a693-221e-4fae-a6aa-d7140480b70b%2F%E5%B9%BB%E7%81%AF%E7%89%8716.png?width=1280&amp;table=block&amp;id=13728992-f45d-4326-9812-46d274b4b999" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/b1a7f0dd743f4b2fa1fc87d372c458b1" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F03ecb35e-59f8-49c4-9296-f852f0a5dc55%2F%E5%B9%BB%E7%81%AF%E7%89%8717.png?width=1280&amp;table=block&amp;id=b1a7f0dd-743f-4b2f-a1fc-87d372c458b1"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F03ecb35e-59f8-49c4-9296-f852f0a5dc55%2F%E5%B9%BB%E7%81%AF%E7%89%8717.png?width=1280&amp;table=block&amp;id=b1a7f0dd-743f-4b2f-a1fc-87d372c458b1" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/5a2fdf3febff4888bcaa9a291aacefcc" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F18709c60-03c8-4efd-836a-72bb270c439a%2F%E5%B9%BB%E7%81%AF%E7%89%8718.png?width=1280&amp;table=block&amp;id=5a2fdf3f-ebff-4888-bcaa-9a291aacefcc"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F18709c60-03c8-4efd-836a-72bb270c439a%2F%E5%B9%BB%E7%81%AF%E7%89%8718.png?width=1280&amp;table=block&amp;id=5a2fdf3f-ebff-4888-bcaa-9a291aacefcc" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/4b798f17309f46378c6057176b6d900c" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd8e3d851-abba-4b5a-bc77-5508f2acca12%2F%E5%B9%BB%E7%81%AF%E7%89%8719.png?width=1280&amp;table=block&amp;id=4b798f17-309f-4637-8c60-57176b6d900c"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd8e3d851-abba-4b5a-bc77-5508f2acca12%2F%E5%B9%BB%E7%81%AF%E7%89%8719.png?width=1280&amp;table=block&amp;id=4b798f17-309f-4637-8c60-57176b6d900c" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/100dc5981500479fb54f097ced53ecc6" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8c027211-ebe2-4592-b026-8cdca6886ed3%2F%E5%B9%BB%E7%81%AF%E7%89%8720.png?width=1280&amp;table=block&amp;id=100dc598-1500-479f-b54f-097ced53ecc6"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8c027211-ebe2-4592-b026-8cdca6886ed3%2F%E5%B9%BB%E7%81%AF%E7%89%8720.png?width=1280&amp;table=block&amp;id=100dc598-1500-479f-b54f-097ced53ecc6" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/a70a914f0bc046979b5e047932905b42" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F21ec7f53-0b7b-4561-9485-81690a91ee86%2F%E5%B9%BB%E7%81%AF%E7%89%8721.png?width=1280&amp;table=block&amp;id=a70a914f-0bc0-4697-9b5e-047932905b42"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F21ec7f53-0b7b-4561-9485-81690a91ee86%2F%E5%B9%BB%E7%81%AF%E7%89%8721.png?width=1280&amp;table=block&amp;id=a70a914f-0bc0-4697-9b5e-047932905b42" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/3106412051084719972bf7d25acebf91" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F82073895-4089-40da-91e7-01005e97b114%2F%E5%B9%BB%E7%81%AF%E7%89%8722.png?width=1280&amp;table=block&amp;id=31064120-5108-4719-972b-f7d25acebf91"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F82073895-4089-40da-91e7-01005e97b114%2F%E5%B9%BB%E7%81%AF%E7%89%8722.png?width=1280&amp;table=block&amp;id=31064120-5108-4719-972b-f7d25acebf91" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/a8c6ae0e379f4a92b930b1976081398f" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb7495bc8-0843-44f4-84f0-98831dfab827%2F%E5%B9%BB%E7%81%AF%E7%89%8723.png?width=1280&amp;table=block&amp;id=a8c6ae0e-379f-4a92-b930-b1976081398f"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb7495bc8-0843-44f4-84f0-98831dfab827%2F%E5%B9%BB%E7%81%AF%E7%89%8723.png?width=1280&amp;table=block&amp;id=a8c6ae0e-379f-4a92-b930-b1976081398f" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/53bae21991b146e4a60b293e203ca463" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa4eed530-4053-415e-80dd-7801e3280890%2F%E5%B9%BB%E7%81%AF%E7%89%8724.png?width=1280&amp;table=block&amp;id=53bae219-91b1-46e4-a60b-293e203ca463"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa4eed530-4053-415e-80dd-7801e3280890%2F%E5%B9%BB%E7%81%AF%E7%89%8724.png?width=1280&amp;table=block&amp;id=53bae219-91b1-46e4-a60b-293e203ca463" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/381e0367f4f44b4d94401d9a36b9b0d3" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcea54844-13ba-4876-a89b-8a953c1fbba3%2F%E5%B9%BB%E7%81%AF%E7%89%8725.png?width=1280&amp;table=block&amp;id=381e0367-f4f4-4b4d-9440-1d9a36b9b0d3"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcea54844-13ba-4876-a89b-8a953c1fbba3%2F%E5%B9%BB%E7%81%AF%E7%89%8725.png?width=1280&amp;table=block&amp;id=381e0367-f4f4-4b4d-9440-1d9a36b9b0d3" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/1d807c1e80aa47e097d10b31d043bdcd" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F2361e9d4-66a5-4cbe-8d66-16eaa842780d%2F%E5%B9%BB%E7%81%AF%E7%89%8726.png?width=1280&amp;table=block&amp;id=1d807c1e-80aa-47e0-97d1-0b31d043bdcd"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F2361e9d4-66a5-4cbe-8d66-16eaa842780d%2F%E5%B9%BB%E7%81%AF%E7%89%8726.png?width=1280&amp;table=block&amp;id=1d807c1e-80aa-47e0-97d1-0b31d043bdcd" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/390703bf299f4f759f18220a53e77f51" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa30b1793-8d5c-4159-ba70-477ecb4ab5d8%2F%E5%B9%BB%E7%81%AF%E7%89%8727.png?width=1280&amp;table=block&amp;id=390703bf-299f-4f75-9f18-220a53e77f51"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa30b1793-8d5c-4159-ba70-477ecb4ab5d8%2F%E5%B9%BB%E7%81%AF%E7%89%8727.png?width=1280&amp;table=block&amp;id=390703bf-299f-4f75-9f18-220a53e77f51" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/a5ff322660404c04ba3e672c64de127e" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">参考资料：</span></span></p></div><div id="https://www.notion.so/3713d30b464042dba359c48bfeaed276" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">[1] 黄健宏 《redis设计与实现》
+[2] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="http://www.redis.cn/articles.html">http://www.redis.cn/articles.html</a></span><span class="SemanticString">
+[3] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://www.bilibili.com/video/BV1xv41137Yj?from=search&amp;seid=440206642219339402&amp;spm_id_from=333.337.0.0">https://www.bilibili.com/video/BV1xv41137Yj?from=search&amp;seid=440206642219339402&amp;spm_id_from=333.337.0.0</a></span><span class="SemanticString">
+[4] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://try.redis.io/">https://try.redis.io/</a></span><span class="SemanticString"> (可在线玩耍)
+[5] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://www.lammertbies.nl/comm/info/crc-calculation">https://www.lammertbies.nl/comm/info/crc-calculation</a></span><span class="SemanticString"> (crc算法)
+[6] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://www.cnblogs.com/itplay/p/10030292.html">https://www.cnblogs.com/itplay/p/10030292.html</a></span><span class="SemanticString"> (取余等价于与运算)
+[7] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://edgar615.github.io/raft.html">https://edgar615.github.io/raft.html</a></span><span class="SemanticString"> (raft算法详解)
+[8] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></span><span class="SemanticString"> (raft算法理解动画)
+[9] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://www.bilibili.com/s/video/BV1Fi4y147ad">https://www.bilibili.com/s/video/BV1Fi4y147ad</a></span><span class="SemanticString"> (raft算法动画视频)
+[10] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://github.com/alibaba/canal#readme">https://github.com/alibaba/canal#readme</a></span><span class="SemanticString"> (canal组件)
+[11] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://llimllib.github.io/bloomfilter-tutorial/zh_CN/">https://llimllib.github.io/bloomfilter-tutorial/zh_CN/</a></span><span class="SemanticString"> (布隆过滤器）
+[12] 吴军 《数学之美》——布隆过滤器在谷歌搜索中的应用
+[13] </span><span class="SemanticString"><a class="SemanticString__Fragment SemanticString__Fragment--Link" href="https://github.com/gendlee/user_register_center/">https://github.com/gendlee/user_register_center/</a></span><span class="SemanticString"> （demo地址）</span></span></p></div><div id="https://www.notion.so/9b7d20f8a3a143e28522a0dc278a6848" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>
+  <footer class="Footer">
+  <div>&copy; 李正的自留地 2024</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+
+</body>
+
+</html>
