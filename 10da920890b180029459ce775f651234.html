@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0016 项目架构（已脱敏）&nbsp;|&nbsp;李正的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0016 项目架构（已脱敏）">
+  
+    <meta name="description" content="交易系统流程图（已脱敏）">
+    <meta property="og:description" content="交易系统流程图（已脱敏）">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;⛩️&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>Home</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/gradients_11.jpg">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;⛩️&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0016 项目架构（已脱敏）</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Thu, Sep 26, 2024</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--gray">
+            <a href="tag/架构.html">架构</a>
+          </span>
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--brown">
+            <a href="tag/已脱敏.html">已脱敏</a>
+          </span>
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--yellow">
+            <a href="tag/银行系统.html">银行系统</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/10da920890b180029459ce775f651234" class="PageRoot"><h1 id="https://www.notion.so/10da920890b1804ab692fc7883467c8b" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/10da920890b1804ab692fc7883467c8b"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">1.交易结算渠道侧整体架构</span></span></h1><div id="https://www.notion.so/10da920890b180b58f89e26674b66828" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F1255afad-430d-4510-b139-cfbc5550b416%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E7%25BB%2593%25E7%25AE%2597.drawio.png?width=891.1749877929688&amp;table=block&amp;id=10da9208-90b1-80b5-8f89-e26674b66828"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F1255afad-430d-4510-b139-cfbc5550b416%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E7%25BB%2593%25E7%25AE%2597.drawio.png?width=891.1749877929688&amp;table=block&amp;id=10da9208-90b1-80b5-8f89-e26674b66828" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/10da920890b18013881cd1324c0a0ee8" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><h1 id="https://www.notion.so/10da920890b18038ade2eb8bfdb7d041" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/10da920890b18038ade2eb8bfdb7d041"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">2.预约任务架构</span></span></h1><div id="https://www.notion.so/10ea920890b180e890bdf1488baecdd4" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fe0160b70-cea8-4d52-b94d-88e9b33ae528%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E9%25A2%2584%25E7%25BA%25A6%25E8%25BD%25AC%25E8%25B4%25A6.drawio.png?width=707.9750366210938&amp;table=block&amp;id=10ea9208-90b1-80e8-90bd-f1488baecdd4"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fe0160b70-cea8-4d52-b94d-88e9b33ae528%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E9%25A2%2584%25E7%25BA%25A6%25E8%25BD%25AC%25E8%25B4%25A6.drawio.png?width=707.9750366210938&amp;table=block&amp;id=10ea9208-90b1-80e8-90bd-f1488baecdd4" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/10ea920890b180aa932dc3226d633615" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><h1 id="https://www.notion.so/10ea920890b180dbbfd7ed7d6cddee42" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/10ea920890b180dbbfd7ed7d6cddee42"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">3.PC端交易架构</span></span></h1><div id="https://www.notion.so/10ea920890b180ffb3bfee9af089b1ec" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fc0cc8f48-215b-4ba5-8158-6ab7f82b9662%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-PC_%25E8%25BD%25AC%25E8%25B4%25A6.drawio.png?width=707.9874877929688&amp;table=block&amp;id=10ea9208-90b1-80ff-b3bf-ee9af089b1ec"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fc0cc8f48-215b-4ba5-8158-6ab7f82b9662%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-PC_%25E8%25BD%25AC%25E8%25B4%25A6.drawio.png?width=707.9874877929688&amp;table=block&amp;id=10ea9208-90b1-80ff-b3bf-ee9af089b1ec" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/10ea920890b18066a840f61f14653b5f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><h1 id="https://www.notion.so/10ea920890b180a98facefde0b38fa52" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/10ea920890b180a98facefde0b38fa52"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">4.限额自适应架构</span></span></h1><div id="https://www.notion.so/10ea920890b180bf843cd2314e8c306c" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Ff3d6e3bb-5a09-4f38-9297-96f996c9d5cd%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E9%2599%2590%25E9%25A2%259D%25E8%2587%25AA%25E9%2580%2582%25E5%25BA%2594%25E6%259E%25B6%25E6%259E%2584.drawio.png?width=707.9874877929688&amp;table=block&amp;id=10ea9208-90b1-80bf-843c-d2314e8c306c"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Ff3d6e3bb-5a09-4f38-9297-96f996c9d5cd%2F%25E9%25A1%25B9%25E7%259B%25AE%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE-%25E9%2599%2590%25E9%25A2%259D%25E8%2587%25AA%25E9%2580%2582%25E5%25BA%2594%25E6%259E%25B6%25E6%259E%2584.drawio.png?width=707.9874877929688&amp;table=block&amp;id=10ea9208-90b1-80bf-843c-d2314e8c306c" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/10fa920890b18027ba92f97e10ad8e68" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>
+  <footer class="Footer">
+  <div>&copy; 李正的自留地 2024</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+
+</body>
+
+</html>
