@@ -24,7 +24,7 @@
     font-size: 20px;
   }
 </style>
-  <title>0004 MySQL中反人类的NULL&nbsp;|&nbsp;李正的自留地</title>
+  <title>0004 MySQL中反人类的NULL&nbsp;|&nbsp;锡安的自留地</title>
   <meta property="og:type" content="blog">
   <meta property="og:title" content="0004 MySQL中反人类的NULL">
   
@@ -91,11 +91,13 @@
     
   
     
+  
+    
       <span class="Navbar__Delim">&centerdot;</span>
       <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
         <div class="Navbar__Btn">
           
-            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🧰&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
           
           <span>工具</span>
         </div>
@@ -186,7 +188,7 @@ MySQL中，not in的实现原理是，将字段值与list（即括号中值）�
 </span><span class="SemanticString"><code class="SemanticString__Fragment SemanticString__Fragment--Code">select * from demo where (biz_type is null or biz_type not in (&#x27;005&#x27;, &#x27;006&#x27;)) and id = &#x27;id-xxx&#x27;</code></span><span class="SemanticString">;</span></span></p></div><div id="https://www.notion.so/0aab7eb993e443b89b60a788778ddb0d" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">📢</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">总结：
 NULL值不应该作为默认值存储。SQL语句后一定要先在测试环境验证，并结合行内SQL分析工具检查结果，同时要提示测试回归对应场景，以防遗漏。</span></span></p></div><div id="https://www.notion.so/69765c387f124d20862dda12cb80fc10" class="Divider"></div><div id="https://www.notion.so/3d5e863eb63c4cc7a6e4a3d0fa9eb527" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">最后，贴上《</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold"><mark class="SemanticString__Fragment SemanticString__Fragment--HighlightedColor SemanticString__Fragment--ColorBlue">高性能MySQL</mark></strong></span><span class="SemanticString">》中的这段关于NULL的描述作为结尾：</span></span></p></div><div id="https://www.notion.so/fa99bb4cdeb44e85901e9f4e0372965c" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F04d26262-9328-4271-80c4-1a9547f41187%2F10.jpg?width=3024&amp;table=block&amp;id=fa99bb4c-deb4-4e85-901e-9f4e0372965c"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F04d26262-9328-4271-80c4-1a9547f41187%2F10.jpg?width=3024&amp;table=block&amp;id=fa99bb4c-deb4-4e85-901e-9f4e0372965c" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><h1 id="https://www.notion.so/e97a9df469eb41498457bb8306e01f08" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--1"><a class="Anchor" href="#https://www.notion.so/e97a9df469eb41498457bb8306e01f08"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString"><mark class="SemanticString__Fragment SemanticString__Fragment--HighlightedColor SemanticString__Fragment--ColorGreen">4.结束语</mark></span></span></h1><div id="https://www.notion.so/49242854e0fc4ec2ae41f523e51cd58b" class="ColorfulBlock ColorfulBlock--BgGray Callout"><div class="Callout__Icon"><div class="Icon">🌜</div></div><p class="Callout__Content"><span class="SemanticStringArray"><span class="SemanticString">本文主要是分析和实验了MySQL中NULL的特性，存在很多反直觉的坑，是开发人员应该特别留意的。为了能减少NULL带来的坑，我们还是要如《高性能MySQL》中建议：尽量避免NULL。其次，SQL语句一定要先执行验证甚至可让运维同事帮忙生产验证，再结合SQL分析工具优化，如果涉及到旧功能，需主动提醒测试回归覆盖该场景。</span></span></p></div><div id="https://www.notion.so/6d8d07c060474949bc557df7cc8ca34a" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>
   <footer class="Footer">
-  <div>&copy; 李正的自留地 2024</div>
+  <div>&copy; 锡安的自留地 2024</div>
   <div>&centerdot;</div>
   <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
       rel="noopener noreferrer">Notablog</a>.

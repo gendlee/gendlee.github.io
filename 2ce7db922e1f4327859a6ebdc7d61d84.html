@@ -24,7 +24,7 @@
     font-size: 20px;
   }
 </style>
-  <title>0005 分布式事务方案之2PC、3PC简介&nbsp;|&nbsp;李正的自留地</title>
+  <title>0005 分布式事务方案之2PC、3PC简介&nbsp;|&nbsp;锡安的自留地</title>
   <meta property="og:type" content="blog">
   <meta property="og:title" content="0005 分布式事务方案之2PC、3PC简介">
   
@@ -91,11 +91,13 @@
     
   
     
+  
+    
       <span class="Navbar__Delim">&centerdot;</span>
       <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
         <div class="Navbar__Btn">
           
-            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;☀️&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🧰&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
           
           <span>工具</span>
         </div>
@@ -148,7 +150,7 @@
 第二阶段：发送PreCommit请求，完成SQL操作，但是未提交；
 第三阶段：发送DoCommit请求，通知所有数据库提交/回滚。</mark></span></span></blockquote><div id="https://www.notion.so/ddb63b4ad4554a23a98a3de9a811fbd5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">如图3所示：</span></span></p></div><div id="https://www.notion.so/2f7b6a0e03f049928659ee12fb79735e" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F67c496e2-dd69-403d-8980-121a35ce1bd5%2F03.png?width=1676&amp;table=block&amp;id=2f7b6a0e-03f0-4992-8659-ee12fb79735e"><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F67c496e2-dd69-403d-8980-121a35ce1bd5%2F03.png?width=1676&amp;table=block&amp;id=2f7b6a0e-03f0-4992-8659-ee12fb79735e" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/226a9f80608548af9e96e8a8ea43e8b5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">                                                 图3 3PC过程示意图</span></span></p></div><div id="https://www.notion.so/d81b7d2bd95b4cb7a6308c1df0edde32" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/3203ceb85d7d4020b76026312c8fec88" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">考虑这样一种情况：我本来是要取消12306支付的，命令发出去之后，由于网络原因，12306超时都未收到我发送的取消支付指令，就主动给我支付了，这显然不合理，这就是3PC的</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">数据不一致性</strong></span><span class="SemanticString">问题，即：</span></span></p></div><div id="https://www.notion.so/70b68e632d6a452ebba10c785ac2f7a5" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</span></span></p></div><div id="https://www.notion.so/bda139f3124849b48a8760a179951156" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/562571093ad3402fb478337c11bba6e4" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">以上就是2PC和3PC的基本介绍，后续文章将继续总结和介绍其他的分布式思想。</span></span></p></div><div id="https://www.notion.so/6c6778a6c6f3497c809d9f4fe655c065" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div></article>
   <footer class="Footer">
-  <div>&copy; 李正的自留地 2024</div>
+  <div>&copy; 锡安的自留地 2024</div>
   <div>&centerdot;</div>
   <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
       rel="noopener noreferrer">Notablog</a>.
