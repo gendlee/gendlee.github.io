@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Chrome, Firefox OS and Opera Status Bar Color -->
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism.min.css">
+<link rel="stylesheet" type="text/css" href="css/SourceSansPro.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/notablog.css">
+<!-- Favicon -->
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;">
+
+<style>
+  :root {
+    font-size: 20px;
+  }
+</style>
+  <title>0020 系统指标计算方式&nbsp;|&nbsp;锡安的自留地</title>
+  <meta property="og:type" content="blog">
+  <meta property="og:title" content="0020 系统指标计算方式">
+  
+    <meta name="description" content="系统指标：可用性">
+    <meta property="og:description" content="系统指标：可用性">
+  
+  
+    <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🪆&lt;/text&gt;&lt;/svg&gt;">
+  
+  <style>
+    .DateTagBar {
+      margin-top: 1.0rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="Navbar">
+  <a href="index.html">
+    <div class="Navbar__Btn">
+      
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🦜&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+      
+      <span>Home</span>
+    </div>
+  </a>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="e48d9ceebf4c4de2b657c3a3d1d308f4.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🧰&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>工具</span>
+        </div>
+      </a>
+    
+  
+    
+      <span class="Navbar__Delim">&centerdot;</span>
+      <a href="about.html">
+        <div class="Navbar__Btn">
+          
+            <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🎏&lt;/text&gt;&lt;/svg&gt;"></span>&nbsp;
+          
+          <span>关于我</span>
+        </div>
+      </a>
+    
+  
+</nav>
+  <header class="Header">
+    
+      <div class="Header__Cover">
+        <img src="https://www.notion.so/images/page-cover/solid_beige.png">
+      </div>
+    
+    <div class="Header__Spacer ">
+    </div>
+    
+      <div class="Header__Icon">
+        <span><img class="inline-img-icon" src="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text text-anchor=%22middle%22 dominant-baseline=%22middle%22 x=%2250%22 y=%2255%22 font-size=%2280%22&gt;🪆&lt;/text&gt;&lt;/svg&gt;"></span>
+      </div>
+    
+    <h1 class="Header__Title">0020 系统指标计算方式</h1>
+    
+      <div class="DateTagBar">
+        
+          <span class="DateTagBar__Item DateTagBar__Date">Posted on Wed, Oct 30, 2024</span>
+        
+        
+          <span class="DateTagBar__Item DateTagBar__Tag DateTagBar__Tag--purple">
+            <a href="tag/术语.html">术语</a>
+          </span>
+        
+      </div>
+    
+  </header>
+  <article id="https://www.notion.so/125a920890b180998499f2d9aad615e8" class="PageRoot"><h3 id="https://www.notion.so/125a920890b180579262f789b09c2dc3" class="ColorfulBlock ColorfulBlock--ColorDefault Heading Heading--3"><a class="Anchor" href="#https://www.notion.so/125a920890b180579262f789b09c2dc3"><svg width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><span class="SemanticStringArray"><span class="SemanticString">RTO和RPO</span></span></h3><div id="https://www.notion.so/125a920890b180788a5ce7e931a4d1f6" class="Image Image--PageWidth"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fba625d0c-7c49-48f1-b529-1b76e6dae22f%2Fbusiness-continuity.png?width=1232.5125732421875&amp;table=block&amp;id=125a9208-90b1-8078-8a5c-e7e931a4d1f6"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Fba625d0c-7c49-48f1-b529-1b76e6dae22f%2Fbusiness-continuity.png?width=1232.5125732421875&amp;table=block&amp;id=125a9208-90b1-8078-8a5c-e7e931a4d1f6" style="width:100%"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/125a920890b180a181f7c4aa7c6e8d80" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">恢复时间目标 (RTO)</strong></span><span class="SemanticString"> 由组织定义。RTO是服务中断和恢复服务之间可接受的最大延迟。这决定了当服务不可用时，什么时间段被视为可接受的时间窗口。
+</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">恢复点目标 (RPO)</strong></span><span class="SemanticString"> 由组织定义。RPO是自上次数据恢复点以来的最大可接受时间。这决定了从上一个恢复点到服务中断之间可接受的数据丢失情况。
+</span></span></p></div><div id="https://www.notion.so/125a920890b180a59965f2abc496a2cf" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">RPO（恢复点目标）、RTO（恢复时间目标）和灾难事件的关系。</em></span></span></p></div><div id="https://www.notion.so/125a920890b1802eac7cf8b1599a871f" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">RTO与MTTR（平均恢复时间）类似，因为两者都衡量从中断开始到工作负载恢复之间的时间。但是，平均值MTTR是在一段时间内取代多个影响可用性的事件，而RTO影响</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">单个</em></span><span class="SemanticString">可用性事件的目标值或允许的最大值。</span></span></p></div><div id="https://www.notion.so/125a920890b1808c8121f5e4f8759088" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><div id="https://www.notion.so/125a920890b1806db453e51ff9aa2936" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">可用性</em></span><span class="SemanticString">（又称为</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">服务可用性</em></span><span class="SemanticString">）既是定量衡量韧性的常用指标，也是具有针对性的韧性目标。</span></span></p></div><ul class="BulletedListWrapper"><li id="https://www.notion.so/125a920890b1800b862ed7b55ec181ca" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">可用性</strong></span><span class="SemanticString">是指工作负载可供使用的时间百分比。</span></span></li></ul><div id="https://www.notion.so/125a920890b180d8a673d68b9de95e0e" class="Image Image--Normal"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Ffdc1d8e0-11ef-4b9c-be73-d0d684aa4d18%2Favailability-formula.png?width=390&amp;table=block&amp;id=125a9208-90b1-80d8-a673-d68b9de95e0e"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2Ffdc1d8e0-11ef-4b9c-be73-d0d684aa4d18%2Favailability-formula.png?width=390&amp;table=block&amp;id=125a9208-90b1-80d8-a673-d68b9de95e0e" style="width:390px"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/125a920890b180b7a971c2153c44087d" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"></span></p></div><ul class="BulletedListWrapper"><li id="https://www.notion.so/125a920890b180f6add1fb94b3a618fd" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString">可用性是一段时间（通常是一个月或一年）内正常运行时间的百分比（例如 99.9%）</span></span></li><li id="https://www.notion.so/125a920890b18080aa01d6aa4c8d4e1f" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString">常见的简单表达方式仅指“9 的数量”；例如，“5 个 9”表示 99.999% 可用</span></span></li><li id="https://www.notion.so/125a920890b180869cf2e1a4109efdc4" class="BulletedList"><span class="SemanticStringArray"><span class="SemanticString">在公式中，有些客户选择在</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">总时间</em></span><span class="SemanticString">中排除计划内的维护停机时间（例如计划内维护）。但不建议采用这种方法，因为用户可能希望在这些时间内使用您的服务。</span></span></li></ul><div id="https://www.notion.so/125a920890b1805b9844ea3b5e840a39" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">下表列出了常见的应用程序可用性设计目标，以及在仍然达到目标的同时，一年内可能会出现的最长中断时间。该表包含我们常常会在每个可用性层看到的应用类型示例。在本文档中，我们会引用这些值。</span></span></p></div><div><div></div><div></div><div></div><div></div><div></div><div></div></div><div id="https://www.notion.so/125a920890b1803f8427de200997e31d" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">根据请求测量可用性：</strong></span><span class="SemanticString">对服务而言，计算成功和失败的请求数可能比计算“可用时间”更容易。在这种情况下，可以采用如下计算公式：
+
+
+</span></span></p></div><div id="https://www.notion.so/125a920890b1805ba355d4b675b64745" class="Image Image--Normal"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F698c825b-f12a-4d4a-af46-0a38d7d5cef9%2Favailability-formula-requests.png?width=400&amp;table=block&amp;id=125a9208-90b1-805b-a355-d4b675b64745"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F698c825b-f12a-4d4a-af46-0a38d7d5cef9%2Favailability-formula-requests.png?width=400&amp;table=block&amp;id=125a9208-90b1-805b-a355-d4b675b64745" style="width:400px"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div><div id="https://www.notion.so/125a920890b1804ca791c0c1fe93123e" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">针对硬依赖关系计算可用性：</strong></span><span class="SemanticString">许多系统对其他系统具有硬依赖关系，依赖的系统中的中断会直接转换为调用系统的中断。这与软依赖关系相反，其中依赖的系统的故障会在应用程序中得到弥补。在出现此类硬依赖关系的情况下，调用系统的可用性是依赖的系统可用性的结果。例如，如果您有一个旨在实现 99.99% 可用性的系统，它对两个其他独立系统具有硬依赖关系，这两个系统都旨在实现 99.99% 的可用性，则工作负载在理论上可以实现 99.97% 的可用性：</span></span></p></div><div id="https://www.notion.so/125a920890b18041a5aedb1bfec2d12b" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">Availinvok × Avail</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">dep1</em></span><span class="SemanticString"> × Avail</span><span class="SemanticString"><em class="SemanticString__Fragment SemanticString__Fragment--Italic">dep2</em></span><span class="SemanticString"> = Availworkload</span></span></p></div><div id="https://www.notion.so/125a920890b18010a648c798e35aee2c" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString">99.99% × 99.99% × 99.99% = 99.97%</span></span></p></div><div id="https://www.notion.so/125a920890b1803fb45dc1cccb4d35ef" class="ColorfulBlock ColorfulBlock--ColorDefault Text"><p class="Text__Content"><span class="SemanticStringArray"><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">针对冗余组件计算可用性：</strong></span><span class="SemanticString">当系统涉及到使用独立的冗余组件（例如，不同可用区中的冗余资源）时，从理论上讲，可用性的计算方法是：100% 减去组件故障率的乘积。例如，如果系统使用了两个独立的组件，每个组件都具有 99.9% 的可用性，此依赖项的有效可用性为 99.9999%：
+
+</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">计算依赖项的可用性。</strong></span><span class="SemanticString">有些依赖项会提供有关其可用性的指导，包括许多 AWS 服务的可用性设计目标。但是，在不可用的情况下（例如，制造商不发布可用性信息的组件），一种估算方法是确定</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">平均故障间隔时间 (MTBF)</strong></span><span class="SemanticString"> 和平</span><span class="SemanticString"><strong class="SemanticString__Fragment SemanticString__Fragment--Bold">均恢复时间 (MTTR)</strong></span><span class="SemanticString">。可以通过以下公式来确定可用性估算值：</span></span></p></div><div id="https://www.notion.so/125a920890b18049ae4ae7fbf45394c6" class="Image Image--Normal"><figure><a href="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F8aa07c13-5f64-4ca8-ba0a-b4ab8c3686b0%2Favail-est-formula.png?width=319&amp;table=block&amp;id=125a9208-90b1-8049-ae4a-e7fbf45394c6"><img src="https://www.notion.so/signed/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F333b4f28-5127-4daf-8c39-ec7700f99e1b%2F8aa07c13-5f64-4ca8-ba0a-b4ab8c3686b0%2Favail-est-formula.png?width=319&amp;table=block&amp;id=125a9208-90b1-8049-ae4a-e7fbf45394c6" style="width:319px"/></a><figcaption><span class="SemanticStringArray"></span></figcaption></figure></div></article>
+  <footer class="Footer">
+  <div>&copy; 锡安的自留地 2024</div>
+  <div>&centerdot;</div>
+  <div>Powered by <a href="https://github.com/dragonman225/notablog" target="_blank"
+      rel="noopener noreferrer">Notablog</a>.
+  </div>
+</footer>
+
+</body>
+
+</html>
