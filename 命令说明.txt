@@ -1,0 +1,21 @@
+1.在当前目录下执行生成博客文件：
+ notablog generate .
+ 
+2.进入public根目录将文件推送github
+ git add .
+ git commit -m"aa"
+ git push
+ 
+ 
+
+【增加Google Analytics统计脚本】
+以下是此账号的 Google 代码。请将该代码复制并粘贴到您网站上每个网页的代码中，紧跟在 <head> 元素之后。每个网页只能添加一个 Google 代码。
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R0BJ0QT0SH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-R0BJ0QT0SH');
+</script>
